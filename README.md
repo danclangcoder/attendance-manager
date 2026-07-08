@@ -24,7 +24,7 @@ Attendance Manager
     ├── Dashboard
     ├── Attendance
     ├── People
-    ├── Reports
+    ├── Logs
     ├── Profile
     ├── Settings
     └── Logout
@@ -62,38 +62,11 @@ Authenticate users before granting access to the application.
 
 Configure the application during the first launch.
 
-### Typical Steps
-
-### 1. Organization Information
-
-* Organization Name
-* Address
-* Logo
-
-### 2. Administrator Account
+### Administrator Account Setup
 
 * Administrator Username
 * Password
 * Email Address
-
-### 3. Database Configuration
-
-* Local or Remote Database
-* Database Credentials
-* Test Connection
-
-### 4. Attendance Method
-
-Supported examples:
-
-* QR Code
-* Manual Attendance
-
-### 5. Finish
-
-* Save Configuration
-* Create Initial Administrator
-* Redirect to Login
 
 ### Notes
 
@@ -145,6 +118,7 @@ Record and manage daily attendance.
 * Attendance History
 * Edit Records (Administrator)
 * Delete Incorrect Records (Administrator)
+* Add classes/subjects per course or section
 
 ---
 
@@ -179,13 +153,13 @@ Typical information stored:
 
 ---
 
-## Reports
+## Logs
 
 ### Purpose
 
-Generate historical attendance reports.
+Generate historical attendance Logs.
 
-### Available Reports
+### Available Logs
 
 * Daily
 * Weekly
@@ -204,21 +178,17 @@ Generate historical attendance reports.
 
 ### Purpose
 
-Manage the currently logged-in user's account.
+Manage the currently logged-in user's account and users.
 
 ### Features
 
-* Profile Picture
+* Profile Picture (Optional)
 * Name
 * Username
 * Email
 * Change Password
-* Activity Log (Optional)
-* Two-Factor Authentication (Optional)
-
-### Notes
-
-This page is only for the current user's account.
+* Add User
+* Link Google Account (OAuth)
 
 ---
 
@@ -239,21 +209,10 @@ Configure system-wide application behavior.
 * Working Hours
 * Overtime Rules
 
-### Users & Roles
-
-* Administrator Accounts
-* User Permissions
-
 ### Database
 
-* Database Connection
 * Backup
 * Restore
-
-### Security
-
-* Password Policy
-* Session Timeout
 
 ### About
 
@@ -263,22 +222,7 @@ Configure system-wide application behavior.
 
 ---
 
-# Recommended Navigation
-
-```
-Dashboard
-│
-├── Attendance
-├── People
-├── Reports
-├── Profile
-├── Settings
-└── Logout
-```
-
----
-
-# Suggested Sidebar
+# Sidebar Navigation
 
 ```
 Attendance Manager
@@ -286,42 +230,10 @@ Attendance Manager
 🏠 Dashboard
 📋 Attendance
 👥 Students
-📊 Reports
+📊 Logs
 👤 Profile
-⚙ Settings
+🛠 Settings
 🚪 Logout
 ```
 
 ---
-
-# Suggested Project Structure
-
-```
-app/
-│
-├── pages/
-│   ├── login.py
-│   ├── setup_wizard.py
-│   ├── dashboard.py
-│   ├── attendance.py
-│   ├── people.py
-│   ├── reports.py
-│   ├── profile.py
-│   └── settings.py
-│
-├── components/
-│   ├── sidebar.py
-│   ├── navbar.py
-│   ├── cards.py
-│   └── dialogs.py
-│
-├── services/
-│   ├── auth.py
-│   ├── attendance.py
-│   ├── reports.py
-│   └── database.py
-│
-├── assets/
-│
-└── main.py
-```
