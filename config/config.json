@@ -1,8 +1,11 @@
 {
     "images": {
-        "path": "assets/images"
+        "path": "assets/logos"
     },
     "icons": {
         "path": "assets/icons"
+    },
+    "profile_images": {
+        "path": "data/profile_images"
     }
 }

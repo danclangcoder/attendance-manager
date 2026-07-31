@@ -14,9 +14,10 @@ wheels = [
 [[package]]
 name = "attendance-system"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "bcrypt" },
+    { name = "ctktooltip" },
     { name = "customtkinter" },
     { name = "email-validator" },
     { name = "pillow" },
@@ -34,6 +35,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
+    { name = "ctktooltip", specifier = ">=0.9" },
     { name = "customtkinter", specifier = ">=6.0.0" },
     { name = "email-validator", specifier = ">=2.3.0" },
     { name = "pillow", specifier = ">=12.2.0" },
@@ -121,6 +123,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
+name = "ctktooltip"
+version = "0.9"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/46/cde993aeae881623d75ac95f8daa0c9b274e52239cca585ea4dc679db3c9/ctktooltip-0.9.tar.gz", hash = "sha256:46b20ddbf18f1822cc37c5fcca96ebcf610a53d154670c8448b84898055a45e9", size = 8661, upload-time = "2026-03-07T16:19:51.807Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/b4/f885a5308e6f410d7b3929e64e0471d76b055754d4f4ca7bd4e76782137d/ctktooltip-0.9-py3-none-any.whl", hash = "sha256:29c009fd425364197be70c1b9c441696a875daba8f4977d97a0e4c3f7e4fe468", size = 8805, upload-time = "2026-03-07T16:19:50.522Z" },
 ]
 
 [[package]]
