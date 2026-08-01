@@ -1,8 +1,8 @@
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, exists
 from sqlalchemy.orm import joinedload
 
 from app.database.engine import SessionLocal
-from app.database.models import UserModel, UserSession
+from app.database.models import UserModel, UserSession, GoogleAccount
 
 
 class UserRepository:
@@ -56,3 +56,13 @@ class UserRepository:
                 select(UserModel)
                 .where(UserModel.email == email)
             )
+
+    def link_to_google(self, user_id, google_id, email, name):
+        google_account = GoogleAccount(user_id=user_id, google_id=google_id, email=email, name=name)
+        with SessionLocal() as db:
+            db.add(google_account)
+            db.commit()
+            db.refresh(google_account)
+        return google_account
+
+            
