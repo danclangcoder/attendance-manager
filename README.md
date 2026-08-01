@@ -89,7 +89,6 @@ Info:
 * Restore
 
 ### About
-
 * Application Version
 * License
 * Developer Information

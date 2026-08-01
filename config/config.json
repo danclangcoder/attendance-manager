@@ -1,11 +1,9 @@
 {
-    "images": {
-        "path": "assets/logos"
-    },
-    "icons": {
-        "path": "assets/icons"
-    },
-    "profile_images": {
-        "path": "data/profile_images"
-    }
+  "assets": {
+    "logos": "resources/assets/logos",
+    "icons": "resources/assets/icons"
+  },
+  "oauth": {
+    "client_secret": "resources/google/client_secret.json"
+  }
 }
