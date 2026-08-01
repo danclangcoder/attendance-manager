@@ -2,11 +2,10 @@ from customtkinter import CTkButton, CTkEntry, CTkFrame, CTkLabel
 
 
 class SetupPage(CTkFrame):
-    def __init__(self, master, controller, auth):
+    def __init__(self, master, auth):
         super().__init__(master)
 
         self.window = master
-        self.controller = controller
         self.auth = auth
 
         entry_form = CTkFrame(master=self, corner_radius=0)

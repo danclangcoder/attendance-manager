@@ -10,15 +10,19 @@ from .pages import (
     SetupPage,
 )
 
+from app.config.app_settings import Settings
+
+WINDOW_ICON = f"{Settings.ICON_PATH}/calendar.ico"
 
 class MainWindow(ctk.CTk):
     def __init__(self, controller):
         super().__init__()
-        ctk.set_appearance_mode("light")
 
         self.controller = controller
 
-        self.iconbitmap("assets/icons/calendar.ico")
+        ctk.set_appearance_mode("light")
+
+        self.iconbitmap(WINDOW_ICON)
         self.title("Attendance Manager")
         # self.geometry("1280x720")
         self.minsize(640, 640)
@@ -27,14 +31,14 @@ class MainWindow(ctk.CTk):
         self.pages: dict[str, ctk.CTkFrame] = {
             "attendance": AttendancePage(self),
             "classes": ClassesPage(self),
-            "settings": SettingsPage(self),
-            "login": LoginPage(self, controller=self.controller, auth=controller.auth),
-            "setup": SetupPage(self, controller=self.controller, auth=controller.auth)
+            "settings": SettingsPage(self, auth=controller.oauth, controller=controller),
+            "login": LoginPage(self, auth=controller.auth),
+            "setup": SetupPage(self, auth=controller.auth)
         }
 
         self.load_pages()
 
-        on_startup = self.controller.run_startup()
+        on_startup = controller.run_startup()
         self.show_page(on_startup)
 
     def center_window(self, width, height):
@@ -53,3 +57,6 @@ class MainWindow(ctk.CTk):
 
     def show_error(self, title, message):
         messagebox.showerror(title, message)
+
+    def show_info(self, title, message):
+        messagebox.showinfo(title, message)

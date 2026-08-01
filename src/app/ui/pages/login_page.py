@@ -1,6 +1,11 @@
 from customtkinter import CTkButton, CTkEntry, CTkFrame, CTkImage, CTkLabel
 from PIL import Image
 
+from app.config.app_settings import Settings
+
+SCHOOL_LOGO = f"{Settings.LOGO_PATH}/access.png"
+APP_LOGO = f"{Settings.LOGO_PATH}/qr.png"
+
 TITLE_CAPSTONE = """ATTENDANCE MANAGEMENT SYSTEM OF STUDENTS USING 2D CODE READER FOR
 ACCESS COMPUTER AND TECHNICAL COLLEGE LAGRO, QUEZON CITY"""
 
@@ -8,11 +13,10 @@ FOOTER_CREDITS = "Version 1.0\nCopyright © 2026. All Rights Reserved."
 
 
 class LoginPage(CTkFrame):
-    def __init__(self, master, controller, auth):
+    def __init__(self, master, auth):
         super().__init__(master)
 
         self.window = master
-        self.controller = controller
         self.auth = auth
 
         entry_form = CTkFrame(master=self, fg_color="#e4e4e4", corner_radius=0)
@@ -36,8 +40,8 @@ class LoginPage(CTkFrame):
         right_bg.grid_rowconfigure(1, weight=1)
         right_bg.grid_columnconfigure(0, weight=1)
 
-        logo_1 = CTkImage(Image.open("assets/logos/access.png"), size=(64, 64))
-        logo_2 = CTkImage(Image.open("assets/logos/qr.png"), size=(64, 64))
+        logo_1 = CTkImage(Image.open(SCHOOL_LOGO), size=(64, 64))
+        logo_2 = CTkImage(Image.open(APP_LOGO), size=(64, 64))
 
         CTkLabel(master=right_bg, text=TITLE_CAPSTONE, text_color="#ffffff", font=("Times New Roman", 20, "bold"), wraplength=450).grid(row=1, column=0, pady=20)
 

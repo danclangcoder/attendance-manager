@@ -1,5 +1,5 @@
 
-from .auth.auth import Auth
+from .auth import Auth, GoogleOAuth
 from .database.repository import UserRepository
 from .ui import MainWindow
 
@@ -8,6 +8,7 @@ class AppInstance:
     def __init__(self):
         print(__file__)
         self.user_repo = UserRepository()
+        self.oauth = GoogleOAuth()
         self.auth = Auth()
         self.window = MainWindow(self)
         self.window.mainloop()
