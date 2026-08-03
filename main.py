@@ -1,8 +1,8 @@
-from src.app.app_instance import AppInstance
+from app.controller import App
 
 
 def main():
-    AppInstance()
+    App()
 
 
 if __name__ == "__main__":

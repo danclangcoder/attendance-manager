@@ -10,5 +10,11 @@
 
     "python.analysis.typeCheckingMode": "basic",
     "python.terminal.activateEnvironment": false,
-    "python.terminal.activateEnvInCurrentTerminal": false
+    "python.terminal.activateEnvInCurrentTerminal": false,
+    "chat.disableAIFeatures": false,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

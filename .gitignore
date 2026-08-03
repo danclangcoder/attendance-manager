@@ -12,7 +12,6 @@ wheels/
 
 # Google OAuth Client
 resources/google/client_secret.json
-resources/data/token.json
 
 # Deprecated source
 src/app_old/

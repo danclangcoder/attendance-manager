@@ -13,7 +13,10 @@ dependencies = [
     "google-auth>=2.56.2",
     "google-auth-httplib2>=0.4.0",
     "google-auth-oauthlib>=1.4.0",
+    "opencv-python>=4.10.0",
     "pillow>=12.2.0",
+    "pyserial>=3.5",
+    "pyzbar>=0.1.9",
     "sqlalchemy>=2.0.51",
 ]
 
@@ -36,9 +39,15 @@ packages = ["src/app"]
 app = "app.__main__:main"
 
 [tool.ruff]
-line-length = 120
+line-length = 190
 
 [tool.ruff.format]
 indent-style = "space"
-quote-style = "single"
-skip-magic-trailing-comma = true
+quote-style = "double"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = true
