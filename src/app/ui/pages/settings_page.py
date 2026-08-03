@@ -11,12 +11,12 @@ GOOGLE_LOGO = f"{Settings.LOGO_PATH}/google.png"
 
 
 class SettingsPage(BasePage):
-    def __init__(self, master, auth, controller):
+    def __init__(self, master):
         super().__init__(master, title="Settings", sidebar=True)
 
         self.view = master
-        self.oauth = auth
-        self.controller = controller
+        self.controller = master.controller
+        self.google_oauth = self.controller.google_oauth
 
         general = CTkFrame(master=self.wrapper, width=500, height=200)
         general.pack(padx=20, pady=20)
@@ -41,7 +41,7 @@ class SettingsPage(BasePage):
         self.unlink_button.bind("<Leave>", lambda widget: self.unlink_button.configure(text_color="#111111"))
 
 
-        if self.oauth.is_connected:
+        if self.google_oauth.is_connected:
             self.unlink_button.grid(row=1, column=1, padx=20, pady=20)
         else:
             self.link_button.grid(row=1, column=1, padx=20, pady=20)
@@ -59,7 +59,7 @@ class SettingsPage(BasePage):
         Thread(target=self._login_google, daemon=True).start()
 
     def _login_google(self):
-        self.oauth.login()
+        self.google_oauth.login()
 
         self.after(0, self._on_connected)
 
@@ -71,8 +71,8 @@ class SettingsPage(BasePage):
     def display_gmail(self):
         print("display_gmail called")
 
-        if self.oauth.is_connected:
-            user = self.oauth.get_user()
+        if self.google_oauth.is_connected:
+            user = self.google_oauth.get_user()
             self.gmail.configure(text=f"\t{user['email']}")
             print("Ok")
         else:
@@ -83,7 +83,7 @@ class SettingsPage(BasePage):
         Thread(target=self._unlink_google, daemon=True).start()
 
     def _unlink_google(self):
-        self.oauth.logout()
+        self.google_oauth.logout()
 
         self.after(0, self._on_unlinked)
 
