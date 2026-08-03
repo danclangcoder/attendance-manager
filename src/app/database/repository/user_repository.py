@@ -1,8 +1,8 @@
-from sqlalchemy import delete, select, exists
+from sqlalchemy import delete, select
 from sqlalchemy.orm import joinedload
 
 from app.database.engine import SessionLocal
-from app.database.models import UserModel, UserSession, GoogleAccount
+from app.database.models import GoogleAccount, UserModel, UserSession
 
 
 class UserRepository:
@@ -38,24 +38,15 @@ class UserRepository:
 
     def get_active_user(self):
         with SessionLocal() as db:
-            return db.scalar(
-                select(UserSession)
-                .options(joinedload(UserSession.user))
-            )
+            return db.scalar(select(UserSession).options(joinedload(UserSession.user)))
 
     def get_by_username(self, username):
         with SessionLocal() as db:
-            return db.scalar(
-                select(UserModel)
-                .where(UserModel.username == username)
-            )
+            return db.scalar(select(UserModel).where(UserModel.username == username))
 
     def get_by_email(self, email):
         with SessionLocal() as db:
-            return db.scalar(
-                select(UserModel)
-                .where(UserModel.email == email)
-            )
+            return db.scalar(select(UserModel).where(UserModel.email == email))
 
     def link_to_google(self, user_id, google_id, email, name):
         google_account = GoogleAccount(user_id=user_id, google_id=google_id, email=email, name=name)
@@ -64,5 +55,3 @@ class UserRepository:
             db.commit()
             db.refresh(google_account)
         return google_account
-
-            
