@@ -2,17 +2,12 @@ from tkinter import messagebox
 
 import customtkinter as ctk
 
-from .pages import (
-    AttendancePage,
-    ClassesPage,
-    LoginPage,
-    SettingsPage,
-    SetupPage,
-)
-
 from app.config.app_settings import Settings
 
+from .pages import AttendancePage, ClassesPage, LoginPage, SettingsPage, SetupPage
+
 WINDOW_ICON = f"{Settings.ICON_PATH}/calendar.ico"
+
 
 class MainWindow(ctk.CTk):
     def __init__(self, controller):
@@ -20,23 +15,21 @@ class MainWindow(ctk.CTk):
 
         self.controller = controller
 
-        ctk.set_appearance_mode("light")
-
         self.iconbitmap(WINDOW_ICON)
         self.title("Attendance Manager")
         # self.geometry("1280x720")
         self.minsize(640, 640)
         self.center_window(1280, 720)
 
-        self.pages: dict[str, ctk.CTkFrame] = {
-            "attendance": AttendancePage(self),
-            "classes": ClassesPage(self),
-            "settings": SettingsPage(self, auth=controller.oauth, controller=controller),
-            "login": LoginPage(self, auth=controller.auth),
-            "setup": SetupPage(self, auth=controller.auth)
+        self.page_classes = {
+            "attendance": AttendancePage,
+            "classes": ClassesPage,
+            "settings": SettingsPage,
+            "login": LoginPage,
+            "setup": SetupPage,
         }
 
-        self.load_pages()
+        self.pages: dict[str, ctk.CTkFrame] = {}
 
         on_startup = controller.run_startup()
         self.show_page(on_startup)
@@ -48,12 +41,17 @@ class MainWindow(ctk.CTk):
         y = (screen_h // 2) - (height // 2)
         self.geometry(f"{width}x{height}+{x}+{y}")
 
-    def load_pages(self):
-        for page in self.pages.values():
+    def get_page(self, page_name: str):
+        if page_name not in self.pages:
+            page = self.page_classes[page_name](self)
             page.place(relwidth=1, relheight=1)
+            self.pages[page_name] = page
+
+        return self.pages[page_name]
 
     def show_page(self, page_name):
-        self.pages[page_name].lift()
+        page = self.get_page(page_name)
+        page.lift()
 
     def show_error(self, title, message):
         messagebox.showerror(title, message)
