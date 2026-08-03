@@ -1,6 +1,4 @@
-import requests
-from pathlib import Path
-
+import requests  # noqa F401
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -21,27 +19,7 @@ TOKEN = Settings.TOKEN_PATH
 
 class GoogleOAuth:
     def __init__(self):
-        self.credentials = None 
-
-    @property
-    def is_connected(self):
-        if not TOKEN.exists():
-            return False
-
-        creds = Credentials.from_authorized_user_file(
-            str(TOKEN),
-            SCOPES,
-        )
-
-        if creds.expired and creds.refresh_token:
-            try:
-                creds.refresh(Request())
-            except Exception:
-                return False
-            
-        self.credentials = creds
-            
-        return creds.valid
+        self.credentials = None
 
     def login(self):
         if TOKEN.exists():
@@ -53,9 +31,11 @@ class GoogleOAuth:
 
         if not self.credentials or not self.credentials.valid:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET, SCOPES)
-
-            self.credentials = flow.run_local_server(port=0, open_browser=True, success_message="You can now return to the application")
-
+            self.credentials = flow.run_local_server(
+                port=0,
+                open_browser=True,
+                success_message="You can now return to the application",
+            )
             TOKEN.write_text(self.credentials.to_json())
 
         return self.credentials
@@ -63,17 +43,26 @@ class GoogleOAuth:
     def logout(self):
         if TOKEN.exists():
             TOKEN.unlink()
-
         self.credentials = None
 
     def get_user(self):
         if not self.is_connected:
             return None
-
-        oauth2 = build(
-            "oauth2",
-            "v2",
-            credentials=self.credentials,
-        )
-
+        oauth2 = build("oauth2", "v2", credentials=self.credentials)
         return oauth2.userinfo().get().execute()
+
+    @property
+    def is_connected(self):
+        if not TOKEN.exists():
+            return False
+
+        creds = Credentials.from_authorized_user_file(str(TOKEN), SCOPES)
+
+        if creds.expired and creds.refresh_token:
+            try:
+                creds.refresh(Request())
+            except Exception:
+                return False
+
+        self.credentials = creds
+        return creds.valid

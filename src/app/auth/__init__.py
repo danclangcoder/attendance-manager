@@ -1,4 +1,4 @@
-from .google_auth import GoogleOAuth
 from .auth import Auth
+from .google_oauth import GoogleOAuth
 
 __all__ = ["GoogleOAuth", "Auth"]
