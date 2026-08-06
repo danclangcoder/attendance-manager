@@ -9,6 +9,7 @@ from .base_model import BaseModel
 
 if TYPE_CHECKING:
     from .section_model import SectionModel
+    from .attendance_record_model import AttendanceRecordModel
 
 
 class StudentModel(BaseModel):
@@ -23,3 +24,5 @@ class StudentModel(BaseModel):
     section_id: Mapped[int] = mapped_column(ForeignKey("section.id"))
     # many-to-one: many students -> one section
     section: Mapped["SectionModel"] = relationship(back_populates="students")
+
+    attendance_records: Mapped[list["AttendanceRecordModel"]] = relationship(back_populates="student", cascade="all, delete-orphan")

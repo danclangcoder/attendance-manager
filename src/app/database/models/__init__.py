@@ -6,6 +6,8 @@ from .section_model import SectionModel
 from .student_model import StudentModel
 from .subject_model import SubjectModel
 from .user_model import GoogleAccount, UserModel, UserSession
+from .course_model import CourseModel
+from .attendance_model import AttendanceRecordModel
 
 __all__ = [
     "BaseModel",
@@ -18,4 +20,5 @@ __all__ = [
     "SubjectModel",
     "ClassesModel",
     "AttendanceRecordModel",
+    "CourseModel",
 ]

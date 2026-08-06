@@ -14,6 +14,16 @@ from .base_repository import BaseRepository
 class ClassesRepository(BaseRepository[ClassesModel]):
     model = ClassesModel
 
+    def exists(self, teacher_id: int, subject_id: int, section_id: int) -> bool:
+        with SessionLocal() as db:
+            return db.scalar(
+                select(ClassesModel.id).where(
+                    ClassesModel.teacher_id == teacher_id,
+                    ClassesModel.subject_id == subject_id,
+                    ClassesModel.section_id == section_id,
+                )
+            ) is not None
+
     def get_all_detailed(self) -> Sequence[ClassesModel]:
         """
         One row per class assignment with subject, section, and teacher
@@ -45,5 +55,15 @@ class ClassesRepository(BaseRepository[ClassesModel]):
                 select(ClassesModel)
                 .where(ClassesModel.section_id == section_id)
                 .options(joinedload(ClassesModel.subject), joinedload(ClassesModel.teacher))
+            )
+            return db.scalars(stmt).unique().all()
+
+    def get_by_subject(self, subject_id: int) -> Sequence[ClassesModel]:
+        """For a Subject -> Class treeview."""
+        with SessionLocal() as db:
+            stmt = (
+                select(ClassesModel)
+                .where(ClassesModel.subject_id == subject_id)
+                .options(joinedload(ClassesModel.subject))
             )
             return db.scalars(stmt).unique().all()

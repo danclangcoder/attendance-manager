@@ -22,6 +22,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "bcrypt" },
+    { name = "ctktable" },
     { name = "ctktooltip" },
     { name = "customtkinter" },
     { name = "email-validator" },
@@ -47,6 +48,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
+    { name = "ctktable", specifier = ">=1.1" },
     { name = "ctktooltip", specifier = ">=0.9" },
     { name = "customtkinter", specifier = ">=6.0.0" },
     { name = "email-validator", specifier = ">=2.3.0" },
@@ -347,6 +349,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/64/a2/4615c8f7d81a00b1d6e6afe19f694e1543582349fb5f4076f6cb5dc36485/cryptography-50.0.0-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:c87f62a3d3b9888ed0fdde100ec06aa61ca9cd44bad9057d1dff9a516b5f5bb9", size = 4878208, upload-time = "2026-07-31T14:24:45.522Z" },
     { url = "https://files.pythonhosted.org/packages/d2/1a/efcfb02f91407149a0dacffffab791f7e19bf6385f63b3666dc8b5e5c9c8/cryptography-50.0.0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:65c2c3add92b45fd0709db8594536aea39c2a67af0e27ffcf049c498501140b7", size = 5037050, upload-time = "2026-07-31T14:24:47.697Z" },
     { url = "https://files.pythonhosted.org/packages/57/30/4a22984d4f1bdfb8c054f07a92bc176b97a3134cc1d6c4b3bffb1f3688b4/cryptography-50.0.0-cp39-abi3-win_amd64.whl", hash = "sha256:d24fead1d4d076e1bfb006dcec392074a3cd8d7b4fc8a595aa64073b2b7a96ba", size = 3874135, upload-time = "2026-07-31T14:24:50.085Z" },
+]
+
+[[package]]
+name = "ctktable"
+version = "1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "customtkinter" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/72/17/7865e96995857a5056c51cc4997d2a2dadc06d8020079b922c6f6ed320a3/CTkTable-1.1.tar.gz", hash = "sha256:5c749124a888a17d129abb3d0afc9330c7dd5eb02e3bda8ffc6ff7b91461b076", size = 8880, upload-time = "2024-01-14T09:52:46.414Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/70/1a/9dfddc895d7252ecb23546d9b1edbf3960b2aa37550deba8070b8fc3ba97/CTkTable-1.1-py3-none-any.whl", hash = "sha256:a2615004bfb138618001c8b5fbf32accbd0142098cae4fb98d3043ae4e29b4d1", size = 9027, upload-time = "2024-01-14T09:52:44.838Z" },
 ]
 
 [[package]]

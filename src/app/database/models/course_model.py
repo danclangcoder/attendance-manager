@@ -2,20 +2,19 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base_model import BaseModel
 
 if TYPE_CHECKING:
-    from .classes_model import ClassesModel
+    from .section_model import SectionModel
 
 
-class SubjectModel(BaseModel):
-    __tablename__ = "subjects"
+class CourseModel(BaseModel):
+    __tablename__ = "course"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    # one-to-many: one subject -> many class entries (one per section it's taught in)
-    classes: Mapped[list["ClassesModel"]] = relationship(back_populates="subject")
+    sections: Mapped[list["SectionModel"]] = relationship(back_populates="course")

@@ -2,7 +2,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import joinedload
 
 from app.database.engine import SessionLocal
-from app.database.models import GoogleAccount, UserModel, UserSession
+from app.database.models import UserModel, UserSession
 
 
 class UserRepository:
@@ -11,9 +11,10 @@ class UserRepository:
         with SessionLocal() as db:
             return db.scalar(select(UserModel.id).limit(1)) is not None
 
-    def add_user(self, first_name, last_name, username, password, email):
+    def add_user(self, first_name, middle_name, last_name, username, password, email):
         user = UserModel(
             first_name=first_name,
+            middle_name=middle_name,
             last_name=last_name,
             username=username,
             password=password,
@@ -47,11 +48,3 @@ class UserRepository:
     def get_by_email(self, email):
         with SessionLocal() as db:
             return db.scalar(select(UserModel).where(UserModel.email == email))
-
-    def link_to_google(self, user_id, google_id, email, name):
-        google_account = GoogleAccount(user_id=user_id, google_id=google_id, email=email, name=name)
-        with SessionLocal() as db:
-            db.add(google_account)
-            db.commit()
-            db.refresh(google_account)
-        return google_account

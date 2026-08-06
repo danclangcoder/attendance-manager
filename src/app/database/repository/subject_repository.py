@@ -11,7 +11,7 @@ from .base_repository import BaseRepository
 class SubjectRepository(BaseRepository[SubjectModel]):
     model = SubjectModel
 
-    def get_by_code(self, code: str) -> SubjectModel | None:
+    def get_by_name(self, name: str) -> SubjectModel | None:
         with SessionLocal() as db:
-            stmt = select(SubjectModel).where(SubjectModel.code == code)
+            stmt = select(SubjectModel).where(SubjectModel.name == name)
             return db.scalars(stmt).first()

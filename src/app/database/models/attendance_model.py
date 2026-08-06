@@ -23,5 +23,5 @@ class AttendanceRecordModel(BaseModel):
     scanned_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     qr_hash: Mapped[str | None] = mapped_column(String(128), default=None)
 
-    student: Mapped["StudentModel"] = relationship()
-    user: Mapped["UserModel"] = relationship()
+    student: Mapped["StudentModel"] = relationship(back_populates="attendance_records")
+    user: Mapped["UserModel"] = relationship(back_populates="attendance_records")
