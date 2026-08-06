@@ -20,5 +20,5 @@ class Sidebar(CTkFrame):
         self.grid_propagate(False)
 
     def logout(self, event=None):
-        self.auth.logout()
+        self.controller.logout()
         self.window.show_page("login")

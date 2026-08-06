@@ -13,11 +13,11 @@ FOOTER_CREDITS = "Version 1.0\nCopyright © 2026. All Rights Reserved."
 
 
 class LoginPage(CTkFrame):
-    def __init__(self, master, auth):
+    def __init__(self, master, controller):
         super().__init__(master)
 
         self.window = master
-        self.auth = auth
+        self.controller = controller
 
         entry_form = CTkFrame(master=self, fg_color="#e4e4e4", corner_radius=0)
         entry_form.pack(fill="both", side="left", expand=True)
@@ -55,9 +55,8 @@ class LoginPage(CTkFrame):
     def submit(self, event=None):
         username = self.username.get()
         password = self.password.get()
-        success, message = self.auth.login(username, password)
+        success, message = self.controller.login(username, password)
         if success:
-            self.window.show_page("attendance")
             self.clear_entries(self.username, self.password)
         else:
             self.window.show_error(title="Login Failed", message=message)
