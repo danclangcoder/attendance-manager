@@ -23,10 +23,8 @@ class Settings:
 
     APP_DATA_DIR = Path.home() / "AppData" / "Roaming" / "AttendanceManager"
 
-    TOKEN_PATH = APP_DATA_DIR / "google" / "token.json"
     DATABASE_PATH = APP_DATA_DIR / "database" / "attendance.db"
 
-    TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
