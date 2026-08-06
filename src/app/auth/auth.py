@@ -8,9 +8,10 @@ class Auth:
         self.user_repo = user_repo
         self.active_user = None
 
-    def register(self, first_name, last_name, username, password, email: str | None):
+    def register(self, first_name, middle_name, last_name, username, password, email: str | None):
         fields = (
             (self.validate_first_name, first_name),
+            (self.validate_middle_name, middle_name),
             (self.validate_last_name, last_name),
             (self.validate_username, username),
             (self.validate_email, email),
@@ -28,8 +29,14 @@ class Auth:
             return False, "Email is already taken."
 
         user = self.user_repo.add_user(
-            first_name, last_name, username, password=self.create_password(password), email=email
+            first_name,
+            middle_name,
+            last_name,
+            username,
+            password=self.create_password(password),
+            email=email,
         )
+        
         self.user_repo.create_session(user_id=user.id)
         self.active_user = user
         return True, None
@@ -74,6 +81,12 @@ class Auth:
     def validate_first_name(first_name):
         if len(first_name.strip()) < 2:
             return False, "Please provide your complete name."
+        return True, None
+
+    @staticmethod
+    def validate_middle_name(middle_name):
+        if middle_name and len(middle_name.strip()) < 2:
+            return False, "Please provide your complete middle name."
         return True, None
 
     @staticmethod
