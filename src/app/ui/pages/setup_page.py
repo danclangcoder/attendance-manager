@@ -41,14 +41,7 @@ class SetupPage(CTkFrame):
         CTkButton(master=entry_form, text="Create Account", command=self.submit).grid(row=10, column=1, pady=20)
 
     def submit(self, event=None):
-        success, message = self.controller.register(
-            self.first_name.get(),
-            self.middle_name.get(),
-            self.last_name.get(),
-            self.username.get(),
-            self.password.get(),
-            self.email.get()
-        )
+        success, message = self.controller.register(self.first_name.get(), self.middle_name.get(), self.last_name.get(), self.username.get(), self.password.get(), self.email.get())
         if not success:
             self.window.show_error(title="Cannot create user", message=message)
 

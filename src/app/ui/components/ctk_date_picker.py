@@ -11,11 +11,11 @@ class CTkDatePicker(ctk.CTkFrame):
     def __init__(self, master=None, **kwargs):
         """
         Initialize the CTkDatePicker instance.
-        
+
         Parameters:
         - master: The parent widget.
         - **kwargs: Additional keyword arguments passed to the CTkFrame constructor.
-        
+
         Initializes the date entry, calendar button, popup, and other related components.
         """
 
@@ -41,7 +41,7 @@ class CTkDatePicker(ctk.CTkFrame):
 
         Parameters:
         - date_format (str): The desired date format string, e.g., "%m/%d/%Y".
-        
+
         Sets the format in which the selected date will be displayed.
         """
         self.date_format = date_format
@@ -56,13 +56,14 @@ class CTkDatePicker(ctk.CTkFrame):
         Sets the language that month and day names will be displayed.
         """
         import locale
+
         locale.setlocale(locale.LC_ALL, localization)
         locale.setlocale(locale.LC_NUMERIC, "C")
 
     def open_calendar(self):
         """
         Open the calendar popup for date selection.
-        
+
         Creates and displays a calendar widget allowing the user to select a date.
         The calendar appears just below the date entry field.
         """
@@ -83,7 +84,6 @@ class CTkDatePicker(ctk.CTkFrame):
         build_process = Thread(target=self.build_calendar())
         build_process.start()
 
-
     def build_calendar(self):
         """
         Build and display the calendar in the popup.
@@ -92,7 +92,7 @@ class CTkDatePicker(ctk.CTkFrame):
         Includes navigation buttons for previous and next months if enabled.
         """
 
-        if hasattr(self, 'calendar_frame'):
+        if hasattr(self, "calendar_frame"):
             self.calendar_frame.destroy()
 
         self.calendar_frame = ctk.CTkFrame(self.popup)
@@ -146,7 +146,9 @@ class CTkDatePicker(ctk.CTkFrame):
                     lbl.grid(row=week, column=day_col)
                 else:
                     if ctk.get_appearance_mode() == "Light":
-                        btn = ctk.CTkButton(self.calendar_frame, text=str(day), width=3, command=lambda day=day: self.select_date(day), fg_color="transparent", text_color="black", hover_color="#3b8ed0")
+                        btn = ctk.CTkButton(
+                            self.calendar_frame, text=str(day), width=3, command=lambda day=day: self.select_date(day), fg_color="transparent", text_color="black", hover_color="#3b8ed0"
+                        )
                     else:
                         btn = ctk.CTkButton(self.calendar_frame, text=str(day), width=3, command=lambda day=day: self.select_date(day), fg_color="transparent")
                     btn.grid(row=week, column=day_col)
@@ -188,18 +190,18 @@ class CTkDatePicker(ctk.CTkFrame):
 
         Parameters:
         - day (int): The day of the month selected by the user.
-        
+
         Sets the selected date in the date entry field and closes the calendar popup.
         """
 
         self.selected_date = datetime(self.current_year, self.current_month, day)
         # Temporarily enable the entry to set the date
-        self.date_entry.configure(state='normal')
+        self.date_entry.configure(state="normal")
         self.date_entry.delete(0, tk.END)
         self.date_entry.insert(0, self.selected_date.strftime(self.date_format))
         # Restore the disabled state if necessary
         if not self.allow_manual_input:
-            self.date_entry.configure(state='disabled')
+            self.date_entry.configure(state="disabled")
         self.popup.destroy()
         self.popup = None
 
@@ -219,15 +221,15 @@ class CTkDatePicker(ctk.CTkFrame):
 
         Parameters:
         - value (bool): If True, manual input in the date entry is allowed; otherwise, it is disabled.
-        
+
         Allows the user to manually enter a date if set to True; otherwise, restricts input to selection via the calendar.
         """
 
         self.allow_manual_input = value
         if not value:
-            self.date_entry.configure(state='disabled')
+            self.date_entry.configure(state="disabled")
         else:
-            self.date_entry.configure(state='normal')
+            self.date_entry.configure(state="normal")
 
     def set_allow_change_month(self, value):
         """

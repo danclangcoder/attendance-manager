@@ -14,18 +14,8 @@ class GoogleSheetsService:
 
     def append(self, spreadsheet_id: str, range_name: str, values: list[list[str]]):
         body = {"values": values}
-        return self.service.spreadsheets().values().append(
-            spreadsheetId=spreadsheet_id,
-            range=range_name,
-            valueInputOption="USER_ENTERED",
-            body=body,
-        ).execute()
+        return self.service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=range_name, valueInputOption="USER_ENTERED", body=body).execute()
 
     def update(self, spreadsheet_id: str, range_name: str, values: list[list[str]]):
         body = {"values": values}
-        return self.service.spreadsheets().values().update(
-            spreadsheetId=spreadsheet_id,
-            range=range_name,
-            valueInputOption="USER_ENTERED",
-            body=body,
-        ).execute()
+        return self.service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=range_name, valueInputOption="USER_ENTERED", body=body).execute()

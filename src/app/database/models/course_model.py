@@ -15,6 +15,6 @@ class CourseModel(BaseModel):
     __tablename__ = "course"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
 
     sections: Mapped[list["SectionModel"]] = relationship(back_populates="course")

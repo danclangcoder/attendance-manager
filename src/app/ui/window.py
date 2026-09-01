@@ -4,12 +4,12 @@ import customtkinter as ctk
 
 from app.config.app_settings import Settings
 
-from .pages import AttendancePage, ClassesPage, LoginPage, SettingsPage, SetupPage
+from .pages import AttendancePage, ClassesPage, LoginPage, SettingsPage, SetupPage, StudentsPage
 
 WINDOW_ICON = f"{Settings.ICON_PATH}/calendar.ico"
 
 
-class MainWindow(ctk.CTk):
+class Window(ctk.CTk):
     def __init__(self, controller):
         super().__init__()
 
@@ -21,13 +21,7 @@ class MainWindow(ctk.CTk):
         self.minsize(640, 640)
         self.center_window(1280, 720)
 
-        self.page_classes = {
-            "attendance": AttendancePage,
-            "classes": ClassesPage,
-            "settings": SettingsPage,
-            "login": LoginPage,
-            "setup": SetupPage,
-        }
+        self.page_classes = {"attendance": AttendancePage, "classes": ClassesPage, "students": StudentsPage, "settings": SettingsPage, "login": LoginPage, "setup": SetupPage}
 
         self.pages: dict[str, ctk.CTkFrame] = {}
 
@@ -49,19 +43,17 @@ class MainWindow(ctk.CTk):
         self.geometry(f"{width}x{height}+{x}+{y}")
 
     def get_page(self, page_name: str):
-        if page_name == "setup":
-            self.center_window(800, 600)
-            self.resizable(False, False)
-
-        elif page_name == "login":
-            self.minsize(800, 600)
-            self.center_window(1280, 720)
-
-        else:
-            self.center_window(1280, 720)
-            self.resizable(True, True)
-
         if page_name not in self.pages:
+            if page_name == "setup":
+                self.center_window(800, 600)
+                self.resizable(False, False)
+
+            elif page_name == "login":
+                self.minsize(800, 600)
+                self.center_window(1280, 720)
+
+            else:
+                self.resizable(True, True)
             page = self.page_classes[page_name](self, controller=self.controller)
             page.place(relwidth=1, relheight=1)
             self.pages[page_name] = page
@@ -73,10 +65,16 @@ class MainWindow(ctk.CTk):
         page.lift()
 
         if hasattr(page, "refresh"):
-            page.refresh() # type: ignore
+            page.refresh()  # type: ignore
+
+        if hasattr(page, "on_hide"):
+            page.on_hide()  # type: ignore
 
     def show_error(self, title, message):
         messagebox.showerror(title, message)
 
     def show_info(self, title, message):
         messagebox.showinfo(title, message)
+
+    def ask_yes_no(self, title, message, parent):
+        messagebox.askyesno(title, message, parent=parent)

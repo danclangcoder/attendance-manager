@@ -28,15 +28,8 @@ class Auth:
         if self.user_repo.get_by_email(email):
             return False, "Email is already taken."
 
-        user = self.user_repo.add_user(
-            first_name,
-            middle_name,
-            last_name,
-            username,
-            password=self.create_password(password),
-            email=email,
-        )
-        
+        user = self.user_repo.add_user(first_name, middle_name, last_name, username, password=self.create_password(password), email=email)
+
         self.user_repo.create_session(user_id=user.id)
         self.active_user = user
         return True, None

@@ -12,14 +12,7 @@ class UserRepository:
             return db.scalar(select(UserModel.id).limit(1)) is not None
 
     def add_user(self, first_name, middle_name, last_name, username, password, email):
-        user = UserModel(
-            first_name=first_name,
-            middle_name=middle_name,
-            last_name=last_name,
-            username=username,
-            password=password,
-            email=email,
-        )
+        user = UserModel(first_name=first_name, middle_name=middle_name, last_name=last_name, username=username, password=password, email=email)
         with SessionLocal() as db:
             db.add(user)
             db.commit()
@@ -48,3 +41,19 @@ class UserRepository:
     def get_by_email(self, email):
         with SessionLocal() as db:
             return db.scalar(select(UserModel).where(UserModel.email == email))
+
+    def get_all(self):
+        with SessionLocal() as db:
+            return db.scalars(select(UserModel)).all()
+
+    def delete(self, user_id):
+        with SessionLocal() as db:
+            user = db.scalar(select(UserModel).where(UserModel.id == user_id))
+
+            if not user:
+                return False
+
+            db.delete(user)
+            db.commit()
+
+            return True

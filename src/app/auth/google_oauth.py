@@ -30,22 +30,15 @@ class GoogleOAuth:
 
         if self.google_account is None:
             return
-        
+
         self.credentials = self.google_repo.get_credentials(user.id)
 
         self.refresh()
 
     def link(self, user):
-        flow = InstalledAppFlow.from_client_secrets_file(
-            CLIENT_SECRET,
-            SCOPES,
-        )
+        flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET, SCOPES)
 
-        self.credentials = flow.run_local_server(
-            port=0,
-            open_browser=True,
-            success_message="You can now return to the application",
-        )
+        self.credentials = flow.run_local_server(port=0, open_browser=True, success_message="You can now return to the application")
 
         profile = self.get_user()
 
@@ -53,13 +46,7 @@ class GoogleOAuth:
             self.reset()
             return
 
-        self.google_account = self.google_repo.save(
-            user_id=user.id,
-            google_id=profile["id"],
-            email=profile["email"],
-            name=profile["name"],
-            credentials=self.credentials,
-        )
+        self.google_account = self.google_repo.save(user_id=user.id, google_id=profile["id"], email=profile["email"], name=profile["name"], credentials=self.credentials)
 
     def unlink(self):
         if self.google_account is None:
@@ -90,20 +77,13 @@ class GoogleOAuth:
 
             self.credentials.refresh(Request())
 
-            self.google_repo.update_credentials(
-                self.google_account.user_id,
-                self.credentials,
-            )
+            self.google_repo.update_credentials(self.google_account.user_id, self.credentials)
 
     def get_user(self):
         if not self.is_connected:
             return None
 
-        oauth2 = build(
-            "oauth2",
-            "v2",
-            credentials=self.credentials,
-        )
+        oauth2 = build("oauth2", "v2", credentials=self.credentials)
 
         return oauth2.userinfo().get().execute()
 
@@ -111,11 +91,7 @@ class GoogleOAuth:
         if not self.is_connected:
             return None
 
-        return build(
-            "drive",
-            "v3",
-            credentials=self.credentials,
-        )
+        return build("drive", "v3", credentials=self.credentials)
 
     def reset(self):
         self.credentials = None
@@ -127,7 +103,4 @@ class GoogleOAuth:
 
     @property
     def is_connected(self):
-        return (
-            self.credentials is not None
-            and self.credentials.valid
-        )
+        return self.credentials is not None and self.credentials.valid

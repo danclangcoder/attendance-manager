@@ -33,3 +33,8 @@ class GoogleDriveService:
 
     def delete_file(self, file_id: str):
         return self.service.files().delete(fileId=file_id).execute()
+
+    def list_folders(self):
+        query = "mimeType='application/vnd.google-apps.folder' and trashed=false"
+
+        return self.service.files().list(q=query, spaces="drive", fields="files(id,name)", orderBy="name").execute().get("files", [])

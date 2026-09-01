@@ -15,12 +15,26 @@ class SectionRepository(BaseRepository[SectionModel]):
     model = SectionModel
 
     def get_all_with_students(self) -> Sequence[SectionModel]:
-        """For a Section -> Students treeview: one query, no N+1 lazy-loads per row."""
         with SessionLocal() as db:
-            stmt = select(SectionModel).options(selectinload(SectionModel.students))
+            stmt = select(SectionModel).options(selectinload(SectionModel.students), selectinload(SectionModel.course))
+
             return db.scalars(stmt).unique().all()
 
     def get_by_name(self, name: str) -> SectionModel | None:
         with SessionLocal() as db:
             stmt = select(SectionModel).where(SectionModel.name == name)
             return db.scalars(stmt).first()
+
+    def get_by_course(self, course_id):
+        with SessionLocal() as db:
+            stmt = select(SectionModel).where(SectionModel.course_id == course_id)
+            return db.scalars(stmt).unique().all()
+
+    def get_by_course_and_name(self, course_id: int, name: str) -> SectionModel | None:
+        with SessionLocal() as db:
+            stmt = select(SectionModel).where(SectionModel.course_id == course_id, SectionModel.name == name)
+            return db.scalars(stmt).first()
+
+    def get_by_course_and_year(self, course_id, year_level):
+        with SessionLocal() as db:
+            return db.scalars(select(SectionModel).where(SectionModel.course_id == course_id, SectionModel.year_level == year_level)).all()

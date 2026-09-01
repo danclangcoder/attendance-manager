@@ -18,19 +18,10 @@ class GoogleAccountRepository:
 
     def save(self, user_id, google_id, email, name, credentials):
         with SessionLocal() as db:
-            account = db.scalar(
-                select(GoogleAccount)
-                .where(GoogleAccount.user_id == user_id)
-            )
+            account = db.scalar(select(GoogleAccount).where(GoogleAccount.user_id == user_id))
 
             if account is None:
-                account = GoogleAccount(
-                    user_id=user_id,
-                    google_id=google_id,
-                    email=email,
-                    name=name,
-                    credentials=credentials.to_json(),
-                )
+                account = GoogleAccount(user_id=user_id, google_id=google_id, email=email, name=name, credentials=credentials.to_json())
                 db.add(account)
             else:
                 account.google_id = google_id
@@ -44,10 +35,7 @@ class GoogleAccountRepository:
 
     def unlink(self, user_id):
         with SessionLocal() as db:
-            db.execute(
-                delete(GoogleAccount)
-                .where(GoogleAccount.user_id == user_id)
-            )
+            db.execute(delete(GoogleAccount).where(GoogleAccount.user_id == user_id))
             db.commit()
 
     def get_credentials(self, user_id: int) -> Credentials | None:
@@ -56,16 +44,11 @@ class GoogleAccountRepository:
         if account is None or account.credentials is None:
             return None
 
-        return Credentials.from_authorized_user_info(
-            json.loads(account.credentials),
-        )
+        return Credentials.from_authorized_user_info(json.loads(account.credentials))
 
     def update_credentials(self, user_id: int, credentials: Credentials):
         with SessionLocal() as db:
-            account = db.scalar(
-                select(GoogleAccount)
-                .where(GoogleAccount.user_id == user_id)
-            )
+            account = db.scalar(select(GoogleAccount).where(GoogleAccount.user_id == user_id))
 
             if account is None:
                 return

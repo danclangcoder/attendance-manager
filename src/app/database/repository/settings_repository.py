@@ -7,12 +7,7 @@ from app.database.models import AppSettings
 class SettingsRepository:
     def get(self, user_id: int, key: str, default: str = "light") -> str:
         with SessionLocal() as db:
-            settings = db.scalar(
-                select(AppSettings).where(
-                    AppSettings.user_id == user_id,
-                    AppSettings.key == key,
-                )
-            )
+            settings = db.scalar(select(AppSettings).where(AppSettings.user_id == user_id, AppSettings.key == key))
 
             return settings.value if settings else default
 

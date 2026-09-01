@@ -3,8 +3,8 @@ from customtkinter import CTkButton, CTkEntry, CTkFrame, CTkLabel, CTkOptionMenu
 
 
 class ClassCard(CTkFrame):
-    def __init__(self, master, root, controller, on_save, on_discard, on_delete, edit_mode=True, data=None):
-        super().__init__(master, fg_color=("#f6f6f6", "#333333"), width=300, height=300, corner_radius=15)
+    def __init__(self, master, root, controller, on_save, on_discard, on_delete, edit_mode=True, data=None, sections=None):
+        super().__init__(master, fg_color=("#f6f6f6", "#333333"), corner_radius=15, width=200, height=360)
 
         self.window = root
         self.controller = controller
@@ -12,8 +12,11 @@ class ClassCard(CTkFrame):
         self.on_discard = on_discard
         self.on_delete = on_delete
         self.data = data
+        self.sections = sections or []
 
-        self.pack_propagate(False)
+        self.grid_propagate(False)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(4, weight=1)
 
         if edit_mode:
             self.create_edit_widgets()
@@ -21,80 +24,118 @@ class ClassCard(CTkFrame):
             self.create_display_widgets()
 
     def create_edit_widgets(self):
-        self.entries = CTkFrame(master=self, fg_color="transparent")
-        self.entries.pack(fill="x", padx=15, pady=15)
-        self.entries.grid_columnconfigure(0, weight=1)
+        # Course
+        CTkLabel(self, text="Course").grid(row=0, column=0, sticky="w", padx=10, pady=(10, 0))
 
-        CTkLabel(master=self.entries, text="Subject").grid(row=0, column=0, sticky="w", padx=5)
+        courses = self.controller.get_all_courses()
+        self.courses = courses
 
-        self.subject_entry = CTkEntry(master=self.entries, placeholder_text="Subject Name or Code", height=32, corner_radius=10)
-        self.subject_entry.grid(row=1, column=0, padx=5, pady=(0, 10), sticky="ew", columnspan=2)
+        course_names = [course.name for course in courses]
 
-        CTkLabel(master=self.entries, text="Section").grid(row=2, column=0, sticky="w", padx=5)
+        self.course_options = CTkOptionMenu(self, values=course_names or ["Select course"], width=200, command=self.on_course_change)
+        self.course_options.grid(row=1, column=0, padx=10, pady=(0, 10), columnspan=2)
 
-        self.section_entry = CTkEntry(master=self.entries, placeholder_text="Section (e.g., LAGBSITM91)", height=32, corner_radius=10)
-        self.section_entry.grid(row=3, column=0, padx=5, pady=(0, 10), sticky="ew", columnspan=2)
+        # Year Level
+        CTkLabel(self, text="Year Level").grid(row=2, column=0, sticky="w", padx=10, pady=(0, 5))
 
-        self.dropdown_widgets = CTkFrame(master=self, fg_color="transparent")
-        self.dropdown_widgets.pack(pady=10)
+        self.year_options = CTkOptionMenu(self, values=["Select year level"], width=200, command=self.on_year_change)
+        self.year_options.grid(row=3, column=0, padx=10, pady=(0, 10), columnspan=2)
 
-        self.courses = CTkOptionMenu(master=self.dropdown_widgets, values=["BSIT", "BSHM", "BSBA"], width=100, fg_color=("#dddddd", "#444444"), text_color=("black", "white"))
-        self.courses.grid(row=0, column=0, padx=5)
-        self.year_level = CTkOptionMenu(master=self.dropdown_widgets, values=["1st Year", "2nd Year", "3rd Year"], width=100, fg_color=("#dddddd", "#444444"), text_color=("black", "white"))
-        self.year_level.grid(row=0, column=1, padx=5)
+        # Section
+        CTkLabel(self, text="Section").grid(row=4, column=0, sticky="w", padx=10, pady=(0, 5))
 
-        self.buttons = CTkFrame(master=self, fg_color="transparent")
-        self.buttons.pack(pady=20, side="bottom")
+        self.section_options = CTkOptionMenu(self, values=["Select section"], width=200)
+        self.section_options.grid(row=5, column=0, padx=10, pady=(0, 10), columnspan=2)
 
-        CTkButton(master=self.buttons, text="Save", command=self.save_widget_state, width=80, corner_radius=12).pack(side="left", padx=5)
-        CTkButton(master=self.buttons, text="Discard", command=self.discard_widget_state, width=80, corner_radius=12).pack(side="left", padx=5)
+        # Subject
+        CTkLabel(self, text="Subject").grid(row=6, column=0, sticky="w", padx=10, pady=(0, 5))
+
+        self.subject_entry = CTkEntry(self, placeholder_text="Subject Name or Code", height=32, corner_radius=10, width=220)
+        self.subject_entry.grid(row=7, column=0, padx=10, pady=(0, 10), columnspan=2)
+
+        # Buttons
+        CTkButton(self, text="Save", command=self.save_widget_state, width=80, corner_radius=12).grid(row=8, column=0, padx=(10, 5), pady=20, sticky="nsew")
+
+        CTkButton(self, text="Discard", command=self.discard_widget_state, width=80, corner_radius=12).grid(row=8, column=1, padx=(0, 10), pady=20, sticky="nsew")
+
+        # Defaults
+        if courses:
+            self.course_options.set(courses[0].name)
+            self.on_course_change(courses[0].name)
+
+    def on_course_change(self, course_name):
+        course = next((course for course in self.courses if course.name == course_name), None)
+
+        if course is None:
+            return
+
+        self.selected_course = course
+
+        year_levels = sorted({section.year_level for section in self.sections if section.course_id == course.id})
+
+        self.year_options.configure(values=year_levels or ["Select year level"])
+
+        if year_levels:
+            self.year_options.set(year_levels[0])
+            self.on_year_change(year_levels[0])
+        else:
+            self.year_options.set("Select year level")
+            self.section_options.configure(values=["Select section"])
+            self.section_options.set("Select section")
+
+    def on_year_change(self, year_level):
+        if not hasattr(self, "selected_course"):
+            return
+
+        sections = [section for section in self.sections if (section.course_id == self.selected_course.id and section.year_level == year_level)]
+
+        section_names = [section.name for section in sections]
+
+        self.filtered_sections = sections
+
+        self.section_options.configure(values=section_names or ["Select section"])
+
+        if section_names:
+            self.section_options.set(section_names[0])
+        else:
+            self.section_options.set("Select section")
 
     def create_display_widgets(self):
         if self.data is None:
             return
 
         delete_button = CTkButton(
-            master=self,
-            text="x",
-            text_color=("#464646", "#dcdcdc"),
-            fg_color="transparent",
-            hover_color=("#f6f6f6", "#333333"),
-            width=20,
-            height=20,
-            command=self.delete_widget,
+            master=self, text="x", text_color=("#464646", "#dcdcdc"), fg_color="transparent", hover_color=("#f6f6f6", "#333333"), width=20, height=20, command=self.delete_widget
         )
         delete_button.pack(side="right", anchor="ne", padx=5, pady=5)
 
-        self.subject_name = CTkLabel(
-            master=self,
-            text=self.data.subject.name,
-            font=("Arial", 16, "bold"),
-        )
+        self.subject_name = CTkLabel(master=self, text=self.data.subject.name, font=("Arial", 16, "bold"))
         self.subject_name.pack(anchor="w", padx=15, pady=(15, 0))
 
-        self.section_name = CTkLabel(
-            master=self,
-            text=self.data.section.name,
-            font=("Arial", 12, "bold"),
-        )
-        self.section_name.pack(anchor="w", padx=15)
+        self.section_name = CTkLabel(master=self, text=self.data.section.name, font=("Arial", 12, "bold"))
+        self.section_name.pack(anchor="w", padx=15, pady=(0, 15))
 
         self.delete_tooltip = CTkToolTip(delete_button, message="Delete Class")
 
     def save_widget_state(self, event=None):
-        subject = self.subject_entry.get().strip()
-        section = self.section_entry.get().strip()
-        course = self.courses.get().strip()
-        year_level = self.year_level.get().strip()
+        subject = self.subject_entry.get().strip().upper()
+        section_name = self.section_options.get().strip()
 
-        if not subject or not section:
+        if not subject or not section_name or section_name == "Select section" or not hasattr(self, "filtered_sections"):
             return
 
-        self.save_class_data(subject, section, course, year_level)
+        section = next((section for section in self.filtered_sections if section.name == section_name), None)
+
+        if section is None:
+            return
+
+        self.save_class_data(subject, section.name, self.selected_course.name, section.year_level)
+
         self.on_save(self)
 
     def save_class_data(self, subject, section, course, year_level):
         success, message = self.controller.create_class(subject, section, course, year_level)
+
         if not success:
             self.window.show_error(title="Database error", message=message)
 
