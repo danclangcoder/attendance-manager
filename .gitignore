@@ -26,3 +26,7 @@ GEMINI.md
 # Temp
 src/app/attendance_lookup.py
 src/app/runtime.py
+
+# Installer/Script
+installer.iss
+installer

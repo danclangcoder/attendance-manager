@@ -1,8 +1,11 @@
 import json
+import sys
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parents[3]
-
+if "__compiled__" in globals():
+    BASE_DIR = Path(sys.executable).parent
+else:
+    BASE_DIR = Path(__file__).resolve().parents[3]
 
 def load_config():
     config_path = BASE_DIR / "config" / "config.json"
